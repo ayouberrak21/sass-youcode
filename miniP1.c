@@ -5,6 +5,13 @@
 
 #define MAX_CONTACTS 100
 
+// Codes ANSI pour les couleurs
+#define RESET   "\033[0m"
+#define RED     "\033[0;31m"
+#define GREEN   "\033[0;32m"
+#define ORANGE  "\033[0;33m"
+#define BLUE    "\033[1;34m"
+
 struct contact {
     char nom[50];
     char telephone[20];
@@ -25,7 +32,7 @@ int validerTelephone(char tel[]) {
 }
 
 void menu() {
-    printf("\n appuyez sur Entree pour revenir au menu...");
+    printf("\n" ORANGE "appuyez sur entree pour revenir au menu..." RESET);
     while(getchar() != '\n');
     getchar();
     system("cls");
@@ -46,21 +53,21 @@ void triContacts() {
 
 void afficherContact() {
     if (nombreContacts == 0) {
-        printf("aucun contact a afficher \n");
+        printf(RED "aucun contact  \n" RESET);
         menu();
         return;
     }
     triContacts();
-    printf("+----------------------+------------+----------------------+\n");
-    printf("| nom                  | telephone  | email                |\n");
-    printf("+----------------------+------------+----------------------+\n");
+    printf(ORANGE "+----------------------+------------+----------------------+\n" RESET);
+    printf(ORANGE "|" RESET BLUE " nom                  "ORANGE"|"RESET BLUE " telephone  "ORANGE"|"RESET BLUE" email                " ORANGE "|\n" RESET);
+    printf(ORANGE "+----------------------+------------+----------------------+\n" RESET);
     for (int i=0; i<nombreContacts; i++) {
-        printf("| %-20s | %-10s | %-20s |\n",
+    printf(ORANGE "|" RESET " %-20s " ORANGE "|" RESET " %-10s " ORANGE "|" RESET " %-20s " ORANGE "|\n" RESET,
                contacts[i].nom,
                contacts[i].telephone,
                contacts[i].email);
     }
-    printf("+----------------------+------------+----------------------+\n");
+    printf(ORANGE "+----------------------+------------+----------------------+\n" RESET);
     menu();
 }
 
@@ -72,9 +79,30 @@ int rechercherContact(char nom[]) {
     return -1;
 }
 
+void rechercheContact1() {
+    char nom[50];
+    printf("taper le nom du contact : ");
+    scanf(" %[^\n]", nom);
+    int index = rechercherContact(nom);
+    if (index == -1) {
+        printf(RED "contact introuvable.\n" RESET);
+        menu();
+        return;
+    }
+    printf(ORANGE "+----------------------+------------+----------------------+\n" RESET);
+    printf(ORANGE "|" RESET BLUE " nom                  "ORANGE"|"RESET BLUE " telephone  "ORANGE"|"RESET BLUE" email                " ORANGE "|\n" RESET);
+    printf(ORANGE "+----------------------+------------+----------------------+\n" RESET);
+    printf(ORANGE "|" RESET " %-20s " ORANGE "|" RESET " %-10s " ORANGE "|" RESET " %-20s " ORANGE "|\n" RESET,
+           contacts[index].nom,
+           contacts[index].telephone,
+           contacts[index].email);
+    printf(ORANGE "+----------------------+------------+----------------------+\n" RESET);
+    menu();
+}
+
 void ajouterContact() {
     if (nombreContacts >= MAX_CONTACTS) {
-        printf("impossible ajouter plus de contacts\n");
+        printf(RED "impossible ajouter plus de contacts\n" RESET);
         menu();
         return;
     }
@@ -85,35 +113,14 @@ void ajouterContact() {
         printf("taper votre numero de telephone : ");
         scanf(" %[^\n]", contacts[nombreContacts].telephone);
         if (!validerTelephone(contacts[nombreContacts].telephone))
-            printf("taper un numero convenable \n");
+            printf(RED "taper un numero convenable \n" RESET);
     } while (!validerTelephone(contacts[nombreContacts].telephone));
 
     printf("taper votre email : ");
     scanf(" %[^\n]", contacts[nombreContacts].email);
 
     nombreContacts++;
-    printf("contact ajoute avec succes.\n");
-    menu();
-}
-
-void rechercheContact1() {
-    char nom[50];
-    printf("taper le nom du contact : ");
-    scanf(" %[^\n]", nom);
-    int index = rechercherContact(nom);
-    if (index == -1) {
-        printf("contact introuvable.\n");
-        menu();
-        return;
-    }
-    printf("+----------------------+------------+----------------------+\n");
-    printf("| nom                  | telephone  | email                |\n");
-    printf("+----------------------+------------+----------------------+\n");
-    printf("| %-20s | %-10s | %-20s |\n",
-           contacts[index].nom,
-           contacts[index].telephone,
-           contacts[index].email);
-    printf("+----------------------+------------+----------------------+\n");
+    printf(GREEN "contact ajoute avec succes.\n" RESET);
     menu();
 }
 
@@ -123,7 +130,7 @@ void modifierContact() {
     scanf(" %[^\n]", nom);
     int index = rechercherContact(nom);
     if (index==-1) {
-        printf("contact introuvable.\n");
+        printf(RED "contact introuvable.\n" RESET);
         menu();
         return;
     }
@@ -133,14 +140,14 @@ void modifierContact() {
         printf("taper le nouveau numero  : ");
         scanf(" %[^\n]", contacts[index].telephone);
         if (!validerTelephone(contacts[index].telephone))
-            printf("taper un numero convenable .\n");
+            printf(RED "taper un numero convenable .\n" RESET);
     } while (!validerTelephone(contacts[index].telephone));
 
     printf("ancien email : %s\n", contacts[index].email);
     printf("taper le nouveau email : ");
     scanf(" %[^\n]", contacts[index].email);
 
-    printf("contact modifie avec succes.\n");
+    printf(GREEN "contact modifie avec succes.\n" RESET);
     menu();
 }
 
@@ -150,7 +157,7 @@ void supprimerContact() {
     scanf(" %[^\n]", nom);
     int index = rechercherContact(nom);
     if (index==-1) {
-        printf("contact introuvable.\n");
+        printf(RED "contact introuvable.\n" RESET);
         menu();
         return;
     }
@@ -162,9 +169,9 @@ void supprimerContact() {
             contacts[i] = contacts[i+1];
         }
         nombreContacts--;
-        printf("contact supprime avec succes.\n");
+        printf(GREEN "contact supprime avec succes.\n" RESET);
     } else {
-        printf("suppression annulee.\n");
+        printf(ORANGE "suppression annulee.\n" RESET);
     }
     menu();
 }
@@ -173,16 +180,16 @@ int main() {
     int choix;
     do {
         system("cls");
-        printf("\n===================================\n");
-        printf("|     MENU GESTION DES CONTACTS   |\n");
-        printf("===================================\n");
-        printf("|     1. ajouter un contact       |\n");
-        printf("|    2. afficher les contacts     |\n");
-        printf("|    3. rechercher un contact     |\n");
-        printf("|     4. modifier un contact      |\n");
-        printf("|    5. supprimer un contact      |\n");
-        printf("|           6. quitter            |\n");
-        printf("===================================\n");
+        printf("\n" ORANGE "===================================\n" RESET);
+        printf(ORANGE "|" RESET BLUE "     MENU GESTION DES CONTACTS   " RESET ORANGE "|\n" RESET);
+        printf(ORANGE "===================================\n" RESET);
+        printf(ORANGE "|" RESET "     1. ajouter un contact       " ORANGE "|\n" RESET);
+        printf(ORANGE "|" RESET "    2. afficher les contacts     " ORANGE "|\n" RESET);
+        printf(ORANGE "|" RESET "    3. rechercher un contact     " ORANGE "|\n" RESET);
+        printf(ORANGE "|" RESET "     4. modifier un contact      " ORANGE "|\n" RESET);
+        printf(ORANGE "|" RESET "    5. supprimer un contact      " ORANGE "|\n" RESET);
+        printf(ORANGE "|" RESET "           6. quitter            " ORANGE "|\n" RESET);
+        printf(ORANGE "===================================\n" RESET);
         printf("taper votre choix : ");
         scanf("%d", &choix);
         switch (choix) {
@@ -191,8 +198,8 @@ int main() {
             case 3: rechercheContact1(); break;
             case 4: modifierContact(); break;
             case 5: supprimerContact(); break;
-            case 6: printf(" fin de programme \n"); break;
-            default: printf("choix invalide\n"); menu();
+            case 6: printf(GREEN " fin de programme \n" RESET); break;
+            default: printf(RED "choix invalide\n" RESET); menu();
         }
     } while (choix!=6);
     return 0;
