@@ -128,6 +128,6 @@ int main(){
 
     }
     }while (choix!=7);
-
+    return 0 ;
     }
 

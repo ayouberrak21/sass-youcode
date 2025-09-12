@@ -4,7 +4,7 @@
 int main(){
     char str1[20];
     printf("taper la 1er chaine : ");
-    scanf("%s",&str1);
+    scanf("%c",&str1);
 
     int i,l;
     l=strlen(str1);

@@ -47,7 +47,7 @@ Joueur equipe[MAX] = {
 
 // la fomction qui evite le doublement de numero de maillot
 int ValidNumMaillot(int numero) {
-    for(int i =0;i<nbJoueurs; i++) {
+    for(int i =0;i<nbJoueurs; i++){
         if(equipe[i].numeroMaillot == numero)
             return 1;
     }
